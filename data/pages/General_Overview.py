@@ -15,7 +15,7 @@ st.markdown("""
     </p>
 """, unsafe_allow_html=True)
 
-# Použít reálný dataset
+# Import datasetu
 df = pd.read_csv("cleaned_sales_data.csv", parse_dates=["Date"])
 df["Date"] = pd.to_datetime(df["Date"], format="%d/%m/%Y")  # Oprava typu
 
