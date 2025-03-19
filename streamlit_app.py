@@ -1,10 +1,8 @@
 import streamlit as st
-
-# Nastavení nadpisu
-st.markdown(
-    '''<h1 style="text-align: center;">Sales Transaction Analysis</h1>''',
-    unsafe_allow_html=True
-)
+import pandas as pd
+import numpy as np
+import datetime
+import time
 
 # Nastavení postranního panelu
 st.sidebar.title("Navigace")
@@ -17,18 +15,20 @@ page = st.sidebar.selectbox("Vyberte stránku", ["General Overview",
                                                 "Anomalies & Issues Detection"]
                             )
 
-# Načtení obsahu stránky "General Overview"
+# Dynamické načítání obsahu stránek
 if page == "General Overview":
-    import data.pages.General_Overview
+    exec(open("data/pages/General_Overview.py").read())
 elif page == "Best-Selling Products":
-    import data.pages.Best_Selling_Products
+    exec(open("data/pages/Best_Selling_Products.py").read())
 elif page == "Sales Trends Over Time":
-    import data.pages.Sales_Trends
+    exec(open("data/pages/Sales_Trends.py").read())
 elif page == "Customer Insights":
-    import data.pages.Customer_Insights
+    exec(open("data/pages/Customer_Insights.py").read())
 elif page == "Returned Products & Refunds":
-    import data.pages.Returned_Products
+    exec(open("data/pages/Returned_Products.py").read())
 elif page == "Geographic Analysis":
-    import data.pages.Geographic_Analysis
+    exec(open("data/pages/Geographic_Analysis.py").read())
 elif page == "Anomalies & Issues Detection":
-    import data.pages.Anomalies
+    exec(open("data/pages/Anomalies.py").read())
+
+
