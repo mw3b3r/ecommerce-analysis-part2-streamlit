@@ -1,9 +1,12 @@
+# Import potřebných knihoven
+# ------------------------------------------------------------------------------
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
 import datetime
 import time
+from io import BytesIO
 
 # Nastavení postranního panelu
 st.sidebar.title("Navigace")

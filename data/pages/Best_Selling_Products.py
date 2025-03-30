@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
+from io import BytesIO
 
 # Hlavní nadpis a popis sekce
 st.markdown("""
@@ -9,10 +10,9 @@ st.markdown("""
     <h3 style="text-align: center; color: #555;">Best Selling Products</h3>
     <div padding: 15px; border-radius: 10px; text-align: center;">
         <p style="font-size: 16px;">
-            Tato stránka obsahuje analýzu nejprodávanějších a nejméně prodávaných produktů v e-shopu.<br>
-            🔹 <strong>TOP 10 produktů podle celkového prodeje</strong><br>
-            🔻 <strong>Produkty s nejnižším prodejem</strong><br>
-            💰 <strong>Produkty s nejvyššími tržbami</strong>
+            This page contains an analysis of the best and worst selling products 
+            in the e-shop. It includes TOP products by number of sales, products 
+            with the lowest sales and products with the highest sales. <br>
         </p>
     </div>
 """, unsafe_allow_html=True)
@@ -150,8 +150,8 @@ def generate_top_revenue_products_graph(df, top_n):  # Funkce nyní přijímá D
     # Přidání hodnot nad sloupce + tooltipy
     fig.update_traces(
         text=top_n_revenue_df["Amount of revenue"].apply(lambda x: f"{x:,.0f}"),
-        textposition="inside",  # ⬅️ POSUNEME ČÍSLA DOVNITŘ SLOUPCŮ
-        insidetextanchor="end",  # ⬅️ UKOTVÍME TEXT NA KONEC SLOUPCE
+        textposition="inside",  #  ČÍSLA DOVNITŘ SLOUPCŮ
+        insidetextanchor="end",  # TEXT NA KONEC SLOUPCE
         hoverinfo="x+y",
         hoverlabel=dict(bgcolor="white", font_size=12, font_color="black"),
     )
@@ -166,8 +166,55 @@ def generate_top_revenue_products_graph(df, top_n):  # Funkce nyní přijímá D
     return fig
 
 # Zobrazení grafu
-fig = generate_top_revenue_products_graph(df, top_h)  # ✅ Předáváme DF i top_h
+fig = generate_top_revenue_products_graph(df, top_h)  # 
 st.plotly_chart(fig, use_container_width=True)
 
 # Oddělovač pro další obsah
 st.divider()
+
+# TABULKA LOWEST SELLING PRODUCTS
+# ------------------------------------------------------------------------------
+
+def show_lowest_sales_table(df, threshold=10):
+    # Odstraníme vrácené produkty a spočítáme počet prodaných kusů podle ProductNo
+    lowest_sales = df[df['ReturnFlag'] != True].groupby('ProductNo')['Quantity'].sum()
+
+    # Vyfiltrujeme produkty s malým počtem prodejů
+    lowest_sales = lowest_sales[lowest_sales <= threshold].sort_values()
+
+    # Vytvoření DataFrame pro zobrazení
+    table_df = pd.DataFrame({
+        'ProductNo': lowest_sales.index,
+        'Number of Sales': lowest_sales.values
+    })
+
+    # Přidáme názvy produktů
+    table_df = table_df.merge(df[['ProductNo', 'ProductName']].drop_duplicates(), on='ProductNo', how='left')
+
+    # Přeskládáme sloupce pro čitelnost
+    table_df = table_df[['ProductName', 'ProductNo', 'Number of Sales']]
+
+    # Nadpis
+    st.subheader("Lowest Selling Products (≤ 10 sales)")
+    st.markdown(
+    "This table shows products with **very low sales**, specifically those with 10 or fewer units sold (excluding returns). "
+    "It can help identify items that may need promotion or removal from the catalog."
+    )
+
+    # Zobrazíme tabulku ve Streamlit
+    st.dataframe(table_df, use_container_width=True)
+
+    # Stažení do Excelu
+    from io import BytesIO
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        table_df.to_excel(writer, index=False, sheet_name='Low Sales')
+
+    st.download_button(
+        label="📥 Download as Excel",
+        data=output.getvalue(),
+        file_name="lowest_selling_products.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+show_lowest_sales_table(df)
