@@ -11,9 +11,11 @@ st.markdown("""
     <h3 style="text-align: center; color: #555;">Customer Insights</h3>
     <div padding: 15px; border-radius: 10px; text-align: center;">
         <p style="font-size: 16px;">
-            This page contains an analysis of sales trends over time. 
-            It includes wholesale sales by month with/ without returns, 
-            daily trends and monthly sales reports.
+        # 👥 5️⃣ Zákaznická analýza
+        # Počet unikátních zákazníků
+        #  TOP 10 nejčastějších zákazníků podle objednávek
+        # Loajalita zákazníků (počet zákazníků s 1 objednávkou vs. opakující zákazníci)
+        # Průměrná hodnota objednávky (AOV)
         </p>
     </div>
 """, unsafe_allow_html=True)
