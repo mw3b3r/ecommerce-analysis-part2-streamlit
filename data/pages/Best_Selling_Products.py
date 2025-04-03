@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 from io import BytesIO
+import plotly.graph_objects as go
 
 # Hlavní nadpis a popis sekce
 st.markdown("""
