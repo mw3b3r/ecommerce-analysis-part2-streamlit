@@ -199,6 +199,9 @@ revenue_by_country = revenue_by_country.dropna(subset=["iso_alpha"])
 
 # MAP BY COUNTRY
 
+# Vyčištění záporných hodnot před logaritmem
+revenue_by_country["Revenue"] = revenue_by_country["Revenue"].clip(lower=0)
+
 # Vytvoření sloupce s logaritmem revenue
 revenue_by_country["LogRevenue"] = np.log10(revenue_by_country["Revenue"] + 1)
 
