@@ -3,7 +3,7 @@
 This is **Part 2** of a multi-stage e-commerce analytics project.  
 It focuses on **exploratory data analysis (EDA)** and **interactive visualization** of cleaned sales data using **Streamlit** and **Plotly**.
 
-🚀 **Live demo** coming soon via Streamlit Community Cloud
+🌐 [Live App on Streamlit Cloud](https://ecommerce-analysis-part2-visualisation.streamlit.app/)
 
 ---
 
